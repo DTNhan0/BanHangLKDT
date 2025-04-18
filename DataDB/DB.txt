@@ -1,0 +1,31 @@
+CREATE DATABASE `banhanglkdt`;
+USE banhanglkdt;
+
+CREATE TABLE product (
+  IdProduct INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  ProductName VARCHAR(255) NOT NULL UNIQUE,
+  Description VARCHAR(255),
+  ImageName VARCHAR(255) NULL,
+  ImageType VARCHAR(50) NULL,
+  ImageData LONGBLOB NULL,
+  Quantity INT,
+  Price FLOAT
+);
+
+CREATE TABLE receipt (
+  IdReceipt INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  TotalPrice FLOAT NOT NULL DEFAULT 0,
+  Customer VARCHAR(120) NOT NULL,
+  PhoneNumber VARCHAR(15) NOT NULL,
+  UpdateAt DATETIME DEFAULT (CURRENT_TIMESTAMP)
+);
+
+CREATE TABLE receiptdetail (
+  IdRD INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  IdReceipt INT,
+  IdProduct INT,
+  OrderQuantity INT,
+  UnitPrice FLOAT,
+  FOREIGN KEY (IdReceipt) REFERENCES receipt(IdReceipt),
+  FOREIGN KEY (IdProduct) REFERENCES product(IdProduct)
+);

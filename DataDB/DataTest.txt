@@ -1,0 +1,33 @@
+USE banhanglkdt;
+
+INSERT INTO product (ProductName, Description, ImageName, ImageType, ImageData, Quantity, Price) VALUES
+('Cảm biến nhiệt độ DHT11', 'Cảm biến đo nhiệt độ và độ ẩm', NULL, NULL, NULL, 150, 2.5),
+('Module relay 1 kênh 5V', 'Module điều khiển thiết bị điện', NULL, NULL, NULL, 200, 1.8),
+('Cảm biến khoảng cách HC-SR04', 'Dùng để đo khoảng cách bằng sóng siêu âm', NULL, NULL, NULL, 120, 3.0),
+('Arduino Uno R3', 'Bo mạch điều khiển lập trình', NULL, NULL, NULL, 50, 8.5),
+('ESP8266 WiFi module', 'Module WiFi dùng trong IoT', NULL, NULL, NULL, 75, 4.2),
+('Cảm biến ánh sáng BH1750', 'Đo cường độ ánh sáng môi trường', NULL, NULL, NULL, 90, 2.7),
+('Mạch nguồn LM2596', 'Module giảm áp DC-DC', NULL, NULL, NULL, 180, 1.9),
+('Cảm biến chuyển động PIR', 'Phát hiện chuyển động người', NULL, NULL, NULL, 130, 2.4),
+('Màn hình OLED 0.96 inch I2C', 'Hiển thị thông tin với I2C giao tiếp', NULL, NULL, NULL, 60, 5.0),
+('Breadboard 830 lỗ', 'Bảng mạch thử không cần hàn', NULL, NULL, NULL, 100, 1.5);
+
+INSERT INTO receipt (TotalPrice, Customer, PhoneNumber) VALUES
+(20.5, 'Nguyễn Văn A', '0123456789'),
+(16.2, 'Trần Văn B', '0123456788'),
+(33.6, 'Lê Thị C', '0123456787');
+
+INSERT INTO receiptdetail (IdReceipt, IdProduct, OrderQuantity, UnitPrice) VALUES
+(1, 1, 2, 2.5),
+(1, 2, 3, 1.8),
+(1, 6, 4, 2.7),
+
+(2, 3, 2, 3.0),
+(2, 8, 2, 2.4),
+(2, 10, 3, 1.5),
+
+(3, 4, 2, 8.5),
+(3, 5, 2, 4.2),
+(3, 9, 1, 5.0),
+(3, 7, 1, 1.9),
+(3, 2, 1, 1.8);
