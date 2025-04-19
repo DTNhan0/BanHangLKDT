@@ -7,9 +7,9 @@ import com.banHangLKDT.model.Product;
 import java.util.List;
 
 public interface ProductService {
-    Product createProduct(ProductRequestDTO dto);
+    Product createProduct(Product product);
     List<Product> getAllProduct();
     Product getProduct(int idProduct);
-    Product updateProduct(int idProduct, ProductRequestDTO dto);
+    Product updateProduct(int idProduct, Product product);
     void deleteProduct(int idProduct);
 }

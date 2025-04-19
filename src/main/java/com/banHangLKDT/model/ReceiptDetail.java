@@ -15,16 +15,22 @@ public class ReceiptDetail {
     @Column(name = "IdRD")
     private Integer idRd;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IdReceipt")
+    private Receipt receipt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IdProduct")
+    private Product product;
+
     @Column(name = "OrderQuantity")
     private Integer orderQuantity;
 
     @Column(name = "UnitPrice")
     private Float unitPrice;
 
-    @Column(name = "IdProduct")
-    private Integer idProduct;
-
-    @Column(name = "IdReceipt")
-    private Integer idReceipt;
-
+    // Thêm trường tính toán
+    public Float getTotalPrice() {
+        return orderQuantity * unitPrice;
+    }
 }

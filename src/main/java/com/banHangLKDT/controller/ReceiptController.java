@@ -1,6 +1,7 @@
 package com.banHangLKDT.controller;
 
 import com.banHangLKDT.dto.request.ReceiptRequestDTO;
+import com.banHangLKDT.dto.response.ReceiptDetailResponseDTO;
 import com.banHangLKDT.dto.response.ReceiptResponseDTO;
 import com.banHangLKDT.model.Receipt;
 import com.banHangLKDT.service.receipt.ReceiptServiceImpl;
@@ -37,7 +38,8 @@ public class ReceiptController {
     //CREATE
     @PostMapping("/receipt")
     public ResponseEntity<ReceiptResponseDTO> createReceipt(@Valid @RequestBody ReceiptRequestDTO dto){
-        return ResponseEntity.ok(this.modelMapper.map(receiptService.createReceipt(dto), ReceiptResponseDTO.class));
+        Receipt receipt = this.modelMapper.map(dto, Receipt.class);
+        return ResponseEntity.ok(this.modelMapper.map(receiptService.createReceipt(receipt), ReceiptResponseDTO.class));
     }
 
     //READ
@@ -64,4 +66,8 @@ public class ReceiptController {
     //DELETE
 
     //OTHER
+    @GetMapping("/receipt/{receiptId}/detail")
+    public ResponseEntity<ReceiptDetailResponseDTO> getReceipt(@PathVariable Integer receiptId) {
+        return ResponseEntity.ok(receiptService.getReceiptWithDetails(receiptId));
+    }
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -36,6 +37,16 @@ public class Receipt {
             timezone = "Asia/Ho_Chi_Minh"
     )
     private LocalDateTime updateAt;
+
+    @OneToMany(mappedBy = "receipt", cascade = CascadeType.ALL)
+    private List<ReceiptDetail> receiptDetails = new ArrayList<>();
+
+    // Thêm phương thức tính tổng
+    public Float getTotalAllPrice() {
+        return receiptDetails.stream()
+                .map(ReceiptDetail::getTotalPrice)
+                .reduce(0f, Float::sum);
+    }
 
     @PrePersist
     protected void onCreate() {

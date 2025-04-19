@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class ThanhToanResponseDTO {
+    private ResponseStatus status;
     private List<DaThanhToan> daThanhToanList;
     private ReceiptResponseDTO receiptResponseDTO;
 
@@ -13,6 +14,7 @@ public class ThanhToanResponseDTO {
     public static class DaThanhToan {
         private Integer idProduct;
         private Integer quantity;
-        private Float price;
+        private Float unitPrice;    // Đổi tên thành unitPrice
+        private Float totalPrice;
     }
 }

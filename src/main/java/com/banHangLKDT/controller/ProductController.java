@@ -1,7 +1,9 @@
 package com.banHangLKDT.controller;
 
 import com.banHangLKDT.dto.request.ProductRequestDTO;
+import com.banHangLKDT.dto.response.ProductListResponseDTO;
 import com.banHangLKDT.dto.response.ProductResponseDTO;
+import com.banHangLKDT.dto.response.ResponseStatus;
 import com.banHangLKDT.model.Product;
 import com.banHangLKDT.service.product.ProductServiceImpl;
 import jakarta.validation.Valid;
@@ -11,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -37,17 +38,18 @@ public class ProductController {
     //CREATE
     @PostMapping("/product")
     public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO dto) {
-        return ResponseEntity.ok(this.modelMapper.map(productService.createProduct(dto), ProductResponseDTO.class));
+        Product product = this.modelMapper.map(dto, Product.class);
+        return ResponseEntity.ok(this.modelMapper.map(productService.createProduct(product), ProductResponseDTO.class));
     }
 
     //READ
     @GetMapping("/products")
-    public ResponseEntity<List<ProductResponseDTO>> getAllProduct() {
-        List<ProductResponseDTO> dtoList = productService.getAllProduct()
-                .stream()
+    public ResponseEntity<ProductListResponseDTO> getAllProduct() {
+        List <ProductResponseDTO> productResponseDTOList = productService.getAllProduct().stream()
                 .map(p -> this.modelMapper.map(p, ProductResponseDTO.class))
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtoList);
+                .toList();
+        ProductListResponseDTO productListResponseDTO = new ProductListResponseDTO(ResponseStatus.SUCCESS, productResponseDTOList);
+        return ResponseEntity.ok(productListResponseDTO);
     }
 
     @GetMapping("/product/{idProduct}")
@@ -61,10 +63,13 @@ public class ProductController {
 
     //UPDATE
     @PutMapping("/product/{idProduct}")
-    public ProductResponseDTO updateProduct(
+    public ResponseEntity<ProductResponseDTO> updateProduct(
             @PathVariable("idProduct") int idProduct,
             @Valid @RequestBody ProductRequestDTO dto) {
-        return this.modelMapper.map(productService.updateProduct(idProduct, dto), ProductResponseDTO.class);
+        Product product = this.modelMapper.map(dto, Product.class);
+        return ResponseEntity.ok(
+                this.modelMapper.map(productService.updateProduct(idProduct, product), ProductResponseDTO.class)
+        );
     }
 
     //DELETE

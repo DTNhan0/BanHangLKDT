@@ -1,7 +1,10 @@
 package com.banHangLKDT.service.receipt;
 
 import com.banHangLKDT.dto.request.ReceiptRequestDTO;
+import com.banHangLKDT.dto.response.ReceiptDetailResponseDTO;
+import com.banHangLKDT.dto.response.ResponseStatus;
 import com.banHangLKDT.model.Receipt;
+import com.banHangLKDT.model.ReceiptDetail;
 import com.banHangLKDT.repository.ReceiptRepo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -43,9 +46,9 @@ public class ReceiptServiceImpl implements ReceiptService{
     //CREATE
     @Transactional
     @Override
-    public Receipt createReceipt(ReceiptRequestDTO dto) {
+    public Receipt createReceipt(Receipt receipt) {
         resetAutoIncrement();
-        return receiptRepo.save(this.modelMapper.map(dto, Receipt.class));
+        return receiptRepo.save(receipt);
     }
 
     //READ
@@ -61,7 +64,7 @@ public class ReceiptServiceImpl implements ReceiptService{
 
     //UPDATE
     @Override
-    public Receipt updateReceipt(int idReceipt, ReceiptRequestDTO dto) {
+    public Receipt updateReceipt(int idReceipt, Receipt receipt) {
         return null;
     }
 
@@ -69,5 +72,40 @@ public class ReceiptServiceImpl implements ReceiptService{
     @Override
     public void deleteReceipt(int idReceipt) {
 
+    }
+
+    //OTHER
+    public ReceiptDetailResponseDTO getReceiptWithDetails(Integer receiptId) {
+        Receipt receipt = receiptRepo.findByIdWithDetails(receiptId)
+                .orElseThrow(() -> new RuntimeException("Receipt not found"));
+
+        return mapToResponse(receipt);
+    }
+
+    private ReceiptDetailResponseDTO mapToResponse(Receipt receipt) {
+        ReceiptDetailResponseDTO response = new ReceiptDetailResponseDTO();
+        response.setStatus(ResponseStatus.SUCCESS);
+
+        ReceiptDetailResponseDTO.ReceiptData data = new ReceiptDetailResponseDTO.ReceiptData();
+        modelMapper.map(receipt, data);
+
+        data.setCart(receipt.getReceiptDetails().stream()
+                .map(this::convertToCartItem)
+                .toList());
+
+        data.setTotalAllPrice(receipt.getTotalAllPrice());
+
+        response.setData(data);
+        return response;
+    }
+
+    private ReceiptDetailResponseDTO.CartItem convertToCartItem(ReceiptDetail detail) {
+        ReceiptDetailResponseDTO.CartItem item = new ReceiptDetailResponseDTO.CartItem();
+        item.setProductId(detail.getProduct().getIdProduct());
+        item.setProductName(detail.getProduct().getProductName());
+        item.setOrderQuantity(detail.getOrderQuantity());
+        item.setUnitPrice(detail.getUnitPrice());
+        item.setTotalPrice(detail.getTotalPrice());
+        return item;
     }
 }

@@ -3,6 +3,8 @@ package com.banHangLKDT.dto.request;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class ThanhToanRequestDTO {
 
@@ -13,13 +15,20 @@ public class ThanhToanRequestDTO {
     private String phoneNumber;
 
     @NotNull
-    private Integer idProduct;
+    private List<ProductCartList> cart;
 
-    @NotNull
-    @Min(1)
-    private Integer quantity;
+    @Data
+    public static class ProductCartList {
+        @NotNull
+        private Integer idProduct;
 
-    @NotNull
-    @Min(1)
-    private Float price;
+        @NotNull
+        @Min(1)
+        private Integer quantity;
+
+        @NotNull
+        @Min(1)
+        private Float price;
+    }
+
 }

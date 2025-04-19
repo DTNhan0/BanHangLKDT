@@ -1,7 +1,5 @@
 package com.banHangLKDT.service.product;
 
-import com.banHangLKDT.dto.request.ProductRequestDTO;
-import com.banHangLKDT.dto.response.ProductResponseDTO;
 import com.banHangLKDT.model.Product;
 import com.banHangLKDT.repository.ProductRepo;
 import jakarta.persistence.EntityManager;
@@ -37,17 +35,11 @@ public class ProductServiceImpl implements ProductService{
         this.productRepo = productRepo;
     }
 
-    @Autowired
-    public void setProductRepo(ProductRepo productRepo) {
-        this.productRepo = productRepo;
-    }
-
     //CREATE
     @Override
     @Transactional
-    public Product createProduct(ProductRequestDTO dto) {
+    public Product createProduct(Product product) {
         resetAutoIncrement();
-        Product product = this.modelMapper.map(dto, Product.class);
         return productRepo.save(product);
     }
 
@@ -65,22 +57,22 @@ public class ProductServiceImpl implements ProductService{
     //UPDATE
     @Override
     @Transactional
-    public Product updateProduct(int idProduct, ProductRequestDTO dto) {
+    public Product updateProduct(int idProduct, Product product) {
         resetAutoIncrement();
 
         Product oldProduct = productRepo.findById(idProduct)
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy thông tin với ID: " + idProduct));
 
         // Kiểm tra CIC đã tồn tại (và khác cái hiện tại)
-        if (!oldProduct.getProductName().equals(dto.getProductName()) &&
-                productRepo.existsByProductName(dto.getProductName())) {
+        if (!oldProduct.getProductName().equals(product.getProductName()) &&
+                productRepo.existsByProductName(product.getProductName())) {
             throw new RuntimeException("Tên product đã tồn tại");
         }
 
-        oldProduct.setProductName(dto.getProductName());
-        oldProduct.setDescription(dto.getDescription());
-        oldProduct.setPrice(dto.getPrice());
-        oldProduct.setQuantity(dto.getQuantity());
+        oldProduct.setProductName(product.getProductName());
+        oldProduct.setDescription(product.getDescription());
+        oldProduct.setPrice(product.getPrice());
+        oldProduct.setQuantity(product.getQuantity());
 
         return productRepo.save(oldProduct);
     }
