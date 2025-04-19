@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReceiptServiceImpl implements ReceiptService{
@@ -76,10 +77,20 @@ public class ReceiptServiceImpl implements ReceiptService{
 
     //OTHER
     public ReceiptDetailResponseDTO getReceiptWithDetails(Integer receiptId) {
-        Receipt receipt = receiptRepo.findByIdWithDetails(receiptId)
-                .orElseThrow(() -> new RuntimeException("Receipt not found"));
+        Optional<Receipt> receiptOptional = receiptRepo.findByIdWithDetails(receiptId);
 
-        return mapToResponse(receipt);
+        if (!receiptOptional.isPresent()) {
+            return createErrorResponse("Không tìm thấy hóa đơn");
+        }
+
+        return mapToResponse(receiptOptional.get());
+    }
+
+    private ReceiptDetailResponseDTO createErrorResponse(String message) {
+        ReceiptDetailResponseDTO response = new ReceiptDetailResponseDTO();
+        response.setStatus(ResponseStatus.FAILED);
+        response.setMessage(message);
+        return response;
     }
 
     private ReceiptDetailResponseDTO mapToResponse(Receipt receipt) {

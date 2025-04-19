@@ -9,6 +9,7 @@ import java.util.List;
 public class ReceiptDetailResponseDTO {
     private ResponseStatus status;
     private ReceiptData data;
+    private String message;
 
     @Data
     public static class ReceiptData {

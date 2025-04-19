@@ -68,6 +68,10 @@ public class ReceiptController {
     //OTHER
     @GetMapping("/receipt/{receiptId}/detail")
     public ResponseEntity<ReceiptDetailResponseDTO> getReceipt(@PathVariable Integer receiptId) {
-        return ResponseEntity.ok(receiptService.getReceiptWithDetails(receiptId));
+        ReceiptDetailResponseDTO responseDTO = receiptService.getReceiptWithDetails(receiptId);
+
+        if(responseDTO == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(responseDTO);
     }
 }

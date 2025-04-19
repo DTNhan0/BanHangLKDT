@@ -85,7 +85,7 @@ public class ThanhToanService {
 
         ThanhToanResponseDTO thanhToanResponseDTO = new ThanhToanResponseDTO();
 
-        thanhToanResponseDTO.setReceiptResponseDTO(this.modelMapper.map(receipt, ReceiptResponseDTO.class));
+        thanhToanResponseDTO.setThongTinHoaDon(this.modelMapper.map(receipt, ReceiptResponseDTO.class));
 
         thanhToanResponseDTO.setDaThanhToanList(
                 receiptDetailList.stream()

@@ -8,7 +8,7 @@ import java.util.List;
 public class ThanhToanResponseDTO {
     private ResponseStatus status;
     private List<DaThanhToan> daThanhToanList;
-    private ReceiptResponseDTO receiptResponseDTO;
+    private ReceiptResponseDTO thongTinHoaDon;
 
     @Data
     public static class DaThanhToan {
