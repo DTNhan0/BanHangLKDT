@@ -51,6 +51,16 @@ public class ThanhToanService {
     @Transactional
     public ThanhToanResponseDTO thanhToan(ThanhToanRequestDTO dto){
 
+        System.out.println(checkQuantity(dto));
+        if(!checkQuantity(dto)){
+            ThanhToanResponseDTO thanhToanResponseDTO = new ThanhToanResponseDTO();
+            thanhToanResponseDTO.setThongTinHoaDon(null);
+            thanhToanResponseDTO.setDaThanhToanList(null);
+            thanhToanResponseDTO.setStatus(ResponseStatus.FAILED);
+            thanhToanResponseDTO.setMessage("Số lượng đặt hàng lớn hơn số lượng tồn kho");
+            return thanhToanResponseDTO;
+        }
+
         resetAutoIncrement();
 //        if(checkQuantityPrice(dtoList))
 //            return null;
@@ -77,6 +87,11 @@ public class ThanhToanService {
             receiptDetail.setUnitPrice(ttd.getPrice());
             receiptDetail.setOrderQuantity(ttd.getQuantity());
 
+            product.setQuantity(product.getQuantity() - ttd.getQuantity());
+
+            //TRỪ SỐ LƯỢNG TỒN
+            productService.updateProduct(product.getIdProduct(), product);
+
             receiptDetailList.add(receiptDetail);
         }
 
@@ -94,6 +109,7 @@ public class ThanhToanService {
         );
 
         thanhToanResponseDTO.setStatus(ResponseStatus.SUCCESS);
+        thanhToanResponseDTO.setMessage("Đã thanh toán thành công!");
 
         return thanhToanResponseDTO;
     }
@@ -104,7 +120,14 @@ public class ThanhToanService {
                 .reduce(0f, Float::sum);
     }
 
-    public boolean checkQuantityPrice(){
-        return false;
+    public boolean checkQuantity(ThanhToanRequestDTO dto){
+        for (ThanhToanRequestDTO.ProductCartList ttd : dto.getCart()) {
+            // Lấy product từ database
+            Product product = productService.getProduct(ttd.getIdProduct());
+            if(ttd.getQuantity() > product.getQuantity()){
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 @Data
 public class ThanhToanResponseDTO {
     private ResponseStatus status;
+    private String message;
     private List<DaThanhToan> daThanhToanList;
     private ReceiptResponseDTO thongTinHoaDon;
 
